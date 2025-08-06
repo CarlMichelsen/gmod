@@ -5,4 +5,6 @@ public record SizeDto(
     int Y)
 {
     public int SquareResolution => (int)Math.Round((double)Math.Max(this.X, this.Y));
+    
+    public int PixelAmount => this.X * this.Y;
 }

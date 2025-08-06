@@ -3,6 +3,7 @@
 public record ImageResponseDto(
     Guid ImageId,
     SizeDto Size,
-    ulong? CreatorSteamId64,
-    int ContentHashCode,
+    string Name,
+    string? CreatorSteamId64,
+    string? ContentHashCode,
     Uri Source);

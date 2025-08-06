@@ -9,9 +9,9 @@ public class ApplicationContext(
 {
     public const string SchemaName = "gmod";
     
-    public DbSet<ImageEntity> Image { get; init; }
+    public required DbSet<ImageEntity> Image { get; init; }
     
-    public DbSet<ImageContentEntity> ImageContent { get; init; }
+    public required DbSet<ImageContentEntity> ImageContent { get; init; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

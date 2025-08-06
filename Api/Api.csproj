@@ -38,25 +38,4 @@
     <ProjectReference Include="..\Application\Application.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <_ContentIncludedByDefault Remove="wwwroot\assets\index--XL0wQr6.css" />
-    <_ContentIncludedByDefault Remove="wwwroot\assets\index-CNSpIf-D.js" />
-    <_ContentIncludedByDefault Remove="wwwroot\assets\index-GCp1-hj4.js" />
-    <_ContentIncludedByDefault Remove="wwwroot\assets\index-PmnA7wXL.css" />
-    <_ContentIncludedByDefault Remove="wwwroot\index.html" />
-    <_ContentIncludedByDefault Remove="wwwroot\vite.svg" />
-    <_ContentIncludedByDefault Remove="wwwroot\alert.mp3" />
-    <_ContentIncludedByDefault Remove="wwwroot\assets\index-B7yiE14Q.css" />
-    <_ContentIncludedByDefault Remove="wwwroot\assets\index-BaiKPFAq.css" />
-    <_ContentIncludedByDefault Remove="wwwroot\assets\index-BXdHi-eQ.js" />
-    <_ContentIncludedByDefault Remove="wwwroot\assets\index-CW01TaJj.js" />
-    <_ContentIncludedByDefault Remove="wwwroot\assets\index-Cy2Cw03H.js" />
-    <_ContentIncludedByDefault Remove="wwwroot\assets\index-C_-voLzW.css" />
-    <_ContentIncludedByDefault Remove="wwwroot\assets\index-D8b4DHJx.css" />
-    <_ContentIncludedByDefault Remove="wwwroot\assets\index-Dcy_BjRd.js" />
-    <_ContentIncludedByDefault Remove="wwwroot\assets\index-H5XxVgdv.js" />
-    <_ContentIncludedByDefault Remove="wwwroot\assets\react-CHdo91hT.svg" />
-    <_ContentIncludedByDefault Remove="wwwroot\snake.svg" />
-  </ItemGroup>
-
 </Project>

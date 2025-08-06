@@ -39,7 +39,12 @@ public static class ImageEndpoints
                 [FromRoute] int skip,
                 [FromRoute] int take) =>
             handler.GetPartialImage(imageId, skip, take));
-
+        
+        imageGroup.MapGet("delete/{imageId:guid}", (
+                [FromServices] IImageHandler handler,
+                [FromRoute] Guid imageId) =>
+            handler.DeleteImage(imageId));
+        
         return imageGroup;
     }
 }

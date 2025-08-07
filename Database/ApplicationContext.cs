@@ -12,12 +12,21 @@ public class ApplicationContext(
     public required DbSet<ImageEntity> Image { get; init; }
     
     public required DbSet<ImageContentEntity> ImageContent { get; init; }
+    
+    public required DbSet<NavNodeEntity> NavNode { get; init; }
+    
+    public required DbSet<NavNodeLinkEntity> NavNodeLink { get; init; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema(SchemaName);
         
+        // Image
         ImageEntity.Configure(modelBuilder);
         ImageContentEntity.Configure(modelBuilder);
+        
+        // Nav
+        NavNodeEntity.Configure(modelBuilder);
+        NavNodeLinkEntity.Configure(modelBuilder);
     }
 }

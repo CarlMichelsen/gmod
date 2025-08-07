@@ -5,6 +5,7 @@ using Presentation.Dto;
 using Presentation.Dto.Image;
 using Presentation.Handler;
 using Presentation.Service;
+using Presentation.Service.Exception;
 
 namespace Application.Handler;
 

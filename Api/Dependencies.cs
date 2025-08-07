@@ -19,7 +19,9 @@ public static class Dependencies
         // Business-logic
         builder.Services
             .AddScoped<IImageService, ImageService>()
-            .AddScoped<IImageHandler, ImageHandler>();
+            .AddScoped<IImageHandler, ImageHandler>()
+            .AddScoped<INavHandler, NavHandler>()
+            .AddScoped<INavService, NavService>();
         
         // Database
         builder.Services.AddDbContext<ApplicationContext>(options =>

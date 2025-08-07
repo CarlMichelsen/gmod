@@ -13,6 +13,8 @@ public static class RootEndpoints
             .WithParameterValidation();
         
         apiGroup.MapImageEndpoints();
+        
+        apiGroup.MapNavEndpoints();
 
         return endpoints;
     }

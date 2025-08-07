@@ -4,6 +4,7 @@ using Database.Entity;
 using Database.Entity.Id;
 using Microsoft.EntityFrameworkCore;
 using Presentation.Service;
+using Presentation.Service.Exception;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.PixelFormats;
 using SixLabors.ImageSharp.Processing;

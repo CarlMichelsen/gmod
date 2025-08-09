@@ -20,8 +20,10 @@ public static class Dependencies
         builder.Services
             .AddScoped<IImageService, ImageService>()
             .AddScoped<IImageHandler, ImageHandler>()
+            .AddScoped<INavService, NavService>()
             .AddScoped<INavHandler, NavHandler>()
-            .AddScoped<INavService, NavService>();
+            .AddScoped<IOdometerService, OdometerService>()
+            .AddScoped<IOdometerHandler, OdometerHandler>();
         
         // Database
         builder.Services.AddDbContext<ApplicationContext>(options =>

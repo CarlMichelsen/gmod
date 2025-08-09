@@ -16,11 +16,6 @@ public static class ImageEndpoints
                 [FromServices] IImageHandler handler,
                 [FromBody] ImageRequestDto requestDto) =>
             handler.LoadImage(requestDto));
-        
-        imageGroup.MapGet("Load", (
-                [FromServices] IImageHandler handler,
-                [AsParameters] ImageRequestDto requestDto) =>
-            handler.LoadImage(requestDto));
 
         imageGroup.MapGet("{imageId:guid}", (
                 [FromServices] IImageHandler handler,
@@ -40,7 +35,18 @@ public static class ImageEndpoints
                 [FromRoute] int take) =>
             handler.GetPartialImage(imageId, skip, take));
         
-        imageGroup.MapGet("delete/{imageId:guid}", (
+        imageGroup.MapDelete("{imageId:guid}", (
+                [FromServices] IImageHandler handler,
+                [FromRoute] Guid imageId) =>
+            handler.DeleteImage(imageId));
+        
+        // These endpoints break convention on purpose because 'expression 2' to only allow get requests
+        imageGroup.MapGet("compatibility/Load", (
+                [FromServices] IImageHandler handler,
+                [AsParameters] ImageRequestDto requestDto) =>
+            handler.LoadImage(requestDto));
+        
+        imageGroup.MapGet("compatibility/delete/{imageId:guid}", (
                 [FromServices] IImageHandler handler,
                 [FromRoute] Guid imageId) =>
             handler.DeleteImage(imageId));

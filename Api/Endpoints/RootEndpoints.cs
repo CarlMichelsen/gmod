@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
-
-namespace Api.Endpoints;
+﻿namespace Api.Endpoints;
 
 public static class RootEndpoints
 {
@@ -15,6 +13,8 @@ public static class RootEndpoints
         apiGroup.MapImageEndpoints();
         
         apiGroup.MapNavEndpoints();
+        
+        apiGroup.MapOdometerEndpoints();
 
         return endpoints;
     }

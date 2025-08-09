@@ -16,6 +16,10 @@ public class ApplicationContext(
     public required DbSet<NavNodeEntity> NavNode { get; init; }
     
     public required DbSet<NavNodeLinkEntity> NavNodeLink { get; init; }
+    
+    public required DbSet<OdometerTripEntity> OdometerTrip { get; init; }
+    
+    public required DbSet<OdometerDataEntity> OdometerData { get; init; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -28,5 +32,9 @@ public class ApplicationContext(
         // Nav
         NavNodeEntity.Configure(modelBuilder);
         NavNodeLinkEntity.Configure(modelBuilder);
+        
+        // Odometer
+        OdometerTripEntity.Configure(modelBuilder);
+        OdometerDataEntity.Configure(modelBuilder);
     }
 }

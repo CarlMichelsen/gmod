@@ -1,8 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Globalization;
+﻿using System.Globalization;
 using Database.Entity.Id;
 using Database.Util;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Database.Entity;
 
@@ -40,7 +40,11 @@ public class OdometerDataEntity : IEntity
             .Property(x => x.Positions)
             .HasConversion(
                 x => string.Join(PositionDelimiter, x.Select(y => y.ToString())),
-                x => x.Split(PositionDelimiter, StringSplitOptions.RemoveEmptyEntries).Select(y => Position.Parse(y)).ToList());
+                x => x.Split(PositionDelimiter, StringSplitOptions.RemoveEmptyEntries).Select(y => Position.Parse(y)).ToList())
+            .Metadata.SetValueComparer(new ValueComparer<List<Position>>(
+                (c1, c2) => c1!.SequenceEqual(c2!),
+                c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),
+                c => c.ToList()));
 
         entity
             .HasOne(x => x.ParentOdometerTrip)
@@ -53,6 +57,11 @@ public class OdometerDataEntity : IEntity
         public override string ToString()
         {
             return $"{this.X},{this.Y},{this.Z}";
+        }
+
+        public double DistanceTo(Position other)
+        {
+            return Math.Sqrt(Math.Pow(other.X - this.X, 2) + Math.Pow(other.Y - this.Y, 2) + Math.Pow(other.Z - this.Z, 2));
         }
 
         public static Position Parse(ReadOnlySpan<char> stringPosition)

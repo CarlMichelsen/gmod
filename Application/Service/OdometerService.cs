@@ -13,6 +13,8 @@ public class OdometerService(
     TimeProvider timeProvider,
     ApplicationContext applicationContext) : IOdometerService
 {
+    private const int MaximumAllowedDistanceBetweenDataPoints = 500;
+    
     public async Task<(OdometerTripEntityId Id, IOdometerService.OdometerData Data)> StartNewTrip(
         string map,
         string tag)
@@ -44,6 +46,7 @@ public class OdometerService(
     {
         var existingTrip = await applicationContext
             .OdometerTrip
+            .Include(t => t.OdometerData)
             .FirstOrDefaultAsync(t =>
                 t.Map == map &&
                 t.Tag == tag &&
@@ -52,6 +55,8 @@ public class OdometerService(
         {
             throw new GmodException("Did not find existing trip");
         }
+
+        this.ValidateAppendedDataHasAppropriateResolution(existingTrip, data);
 
         var dataEntity = new OdometerDataEntity
         {
@@ -80,24 +85,51 @@ public class OdometerService(
             .Where(t =>
                 t.Map == map &&
                 t.Tag == tag)
-            .OrderByDescending(t => t.StartedAt)
+            .OrderBy(t => t.StartedAt)
             .Include(t => t.OdometerData)
             .ToListAsync();
         
-        var waypoints = trips
-            .SelectMany(t => t.OdometerData)
-            .OrderByDescending(o => o.ReceivedAt)
+        return new IOdometerService.OdometerData(
+            TotalUnitsTravelled: (int)trips.Select(TotalUnitsTravelled).Sum(),
+            Map: map,
+            Tag: tag);
+    }
+    
+    private static double TotalUnitsTravelled(OdometerTripEntity tripEntity)
+    {
+        if (tripEntity.OdometerData is null)
+        {
+            throw new GmodException(
+                "OdometerTrip does not have position data included from the database");
+        }
+        
+        var waypoints = tripEntity.OdometerData
             .SelectMany(o => o.Positions)
             .ToList();
         
-        var totalDistance = waypoints
-            .Zip(waypoints.Skip(1), (p1, p2) =>
-                Math.Sqrt(Math.Pow(p2.X - p1.X, 2) + Math.Pow(p2.Y - p1.Y, 2) + Math.Pow(p2.Z - p1.Z, 2)))
+        return waypoints
+            .Zip(waypoints.Skip(1), (p1, p2) => p1.DistanceTo(p2))
             .Sum();
+    }
+    
+    private void ValidateAppendedDataHasAppropriateResolution(OdometerTripEntity tripEntity, List<OdometerDataEntity.Position> newPositions)
+    {
+        var waypoints = tripEntity.OdometerData
+            .SelectMany(o => o.Positions)
+            .ToList();
 
-        return new IOdometerService.OdometerData(
-            TotalUnitsTravelled: (int)totalDistance,
-            Map: map,
-            Tag: tag);
+        var stitchedWaypoints = waypoints.Count > 0
+            ? new List<OdometerDataEntity.Position>([waypoints.Last(), ..newPositions])
+            : new List<OdometerDataEntity.Position>(newPositions);
+
+        var hasTooLongDistance = stitchedWaypoints
+            .Zip(stitchedWaypoints.Skip(1), (p1, p2) => p1.DistanceTo(p2))
+            .Any(dist => dist > MaximumAllowedDistanceBetweenDataPoints);
+
+        if (hasTooLongDistance)
+        {
+            logger.LogWarning("Attempted to append odometer data that had too low resolution");
+            throw new GmodException("The distance between appended points is too large");
+        }
     }
 }
